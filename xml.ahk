@@ -168,54 +168,54 @@ class xml
 		ObjRelease(Object(this.doc)) ; Is this necessary??
 		OutputDebug, % "Object freed."
 	}
-	
+		
 	__Set(property, value) {
 		if (property ~= "i)^(doc|file)$") { ; Class property
-		if (property = "file") {
-			if (value ~= "(^$|[^<>:""/\\|?*]+\.[^<>:""/\\|?*\s]+$)")
-			return this._[property] := value
-			else return false
-		}
-	} else { ; XML DOM property
-	try return (this.doc)[property] := value
-	catch
-	return false
-}
-}
-
-__Get(property) {
-	if !ObjHasKey(this, property) { ; Redundant??
-	if (property = "file")
-	return this._.HasKey(property)
-	? this._[property]
-	: false
-	else {
-		try return (this.doc)[property]
-		catch
-		; Allow user to select a node by providing an
-		; XPath expression as key (short-hand way)
-		; e.g. xmlObj["//Element/Child"] is equivalent
-		; to xmlObj.selectSingleNode("//Element/Child")
-		try return this.selectSingleNode(property)
-	}
-}
-}
-
-__Call(method, params*) {
-	static BF := "i)^(Insert|Remove|(Min|Max)Index|(Set|Get)Capacity"
-	. "|GetAddress|_NewEnum|HasKey|Clone)$"
-	
-	if !ObjHasKey(xml, method) {
-		if RegExMatch(method, "iJ)^(add|insert)((?P<_>E)lement|(?P<_>C)hild)$", m)
-		return this["addInsert" m_](method, params*)
-		else {
-			try return (this.doc)[method](params*)
-			catch e
-			if !(method ~= BF)
-			throw e
+			if (property = "file") {
+				if (value ~= "(^$|[^<>:""/\\|?*]+\.[^<>:""/\\|?*\s]+$)")
+				return this._[property] := value
+				else return false
+			}
+		} else { ; XML DOM property
+			try return (this.doc)[property] := value
+			catch
+			return false
 		}
 	}
-}
+
+	__Get(property) {
+		if !ObjHasKey(this, property) { ; Redundant??
+			if (property = "file")
+				return this._.HasKey(property)
+				? this._[property]
+				: false
+			else {
+				try return (this.doc)[property]
+				catch
+				; Allow user to select a node by providing an
+				; XPath expression as key (short-hand way)
+				; e.g. xmlObj["//Element/Child"] is equivalent
+				; to xmlObj.selectSingleNode("//Element/Child")
+				try return this.selectSingleNode(property)
+			}
+		}
+	}
+
+	__Call(method, params*) {
+		static BF := "i)^(Insert|Remove|(Min|Max)Index|(Set|Get)Capacity"
+		. "|GetAddress|_NewEnum|HasKey|Clone)$"
+		
+		if !ObjHasKey(xml, method) {
+			if RegExMatch(method, "iJ)^(add|insert)((?P<_>E)lement|(?P<_>C)hild)$", m)
+			return this["addInsert" m_](method, params*)
+			else {
+				try return (this.doc)[method](params*)
+				catch e
+				if !(method ~= BF)
+				throw e
+			}
+		}
+	}
 
 /*
 	METHOD: rename
