@@ -1,15 +1,16 @@
 ﻿#Requires AutoHotkey v2.0
 
-loadXML(src) {
-/*  
-*/
-    if FileExist(src) {
-        data := FileRead(src)
-    } else {
-        data := src
-    }
-    oXML := ComObject("Msxml2.DOMDocument.6.0")
-    oXML.loadXML(data)
-    
-    return oXML
+class xml 
+{
+	__New(src:="") {
+		static MSXML := "MSXML2.DOMDocument.6.0"
+		
+		this.doc := ComObject(MSXML)
+		if FileExist(src) {
+			data := FileRead(src)
+		} else {
+			data := src
+		}
+		this.doc.loadXML(data)
+	}
 }
