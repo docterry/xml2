@@ -2,15 +2,21 @@
 
 class xml 
 {
-	__New(src:="") {
-		static MSXML := "MSXML2.DOMDocument.6.0"
-		
-		this.doc := ComObject(MSXML)
+	static load(src) {
 		if FileExist(src) {
 			data := FileRead(src)
 		} else {
 			data := src
 		}
-		this.doc.loadXML(data)
+		oXML := ComObject("MSXML2.DOMDocument.6.0")
+		oXML.async := false
+		oXML.loadXML(data)
+	
+		return oXML
 	}
+
+	static getAtt(element,id) {
+		
+	}
+	
 }
