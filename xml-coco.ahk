@@ -1,4 +1,90 @@
-﻿/*
+﻿class xml2 {
+	__New(src:="") {
+		static MSXML := "MSXML2.DOMDocument.6.0"
+
+		this.Push("_")
+		this.doc := ComObject(MSXML)
+		if src {
+			if (src ~= "s)^<.*>$") { ; XML string
+				this.loadXML(src)
+			}
+			else if (src ~= "[^<>:`"/\\|?*]+\.[^<>:`"/\\|?*\s]+$") {
+				if FileExist(src) { ; Path/URL to XML file/resource
+					this.load(src)
+				}
+			} else {
+				throw Error("The parameter '" src "' is neither an XML file "
+				. " nor a string containing XML string.`n", -1, src)
+			}
+			
+			; Get last parsing error
+			if (pe := this.parseError).errorCode {
+				m := pe.url ? ["file", "load"] : ["string", "loadXML"]
+				
+				; throw exception
+				throw Error("Invalid XML " m.1 ".`nError Code: " pe.errorCode
+				. "`nFilePos: " pe.filePos "`nLine: " pe.line "`nLinePos: " pe.linePos
+				. "`nReason: " pe.reason "`nSource Text: " pe.srcText
+				. "`nURL: " pe.url "`n", -1, m.2)
+			}
+		}
+	}
+	__Get(property) {
+		if !ObjHasOwnProp(this, property) { ; Redundant??
+			if (property = "file") {
+				return this._.Has(property)
+				? this._[property]
+				: false
+			}
+			else {
+				try return (this.doc)[property]
+				catch
+				; Allow user to select a node by providing an
+				; XPath expression as key (short-hand way)
+				; e.g. xmlObj["//Element/Child"] is equivalent
+				; to xmlObj.selectSingleNode("//Element/Child")
+				try return this.selectSingleNode(property)
+			}
+		}
+	}
+	__Set(property, value) {
+		if (property ~= "i)^(doc|file)$") { ; Class property
+			if (property = "file") {
+				if (value ~= "(^$|[^<>:`"/\\|?*]+\.[^<>:`"/\\|?*\s]+$)") {
+					return this._[property] := value
+				}
+				else return false
+			}
+		} else { ; XML DOM property
+			try return (this.doc)[property] := value
+			catch
+			return false
+		}
+	}
+	__Call(method, params*) {
+		static BF := "i)^(Insert|Remove|(Min|Max)Index|(Set|Get)Capacity"
+		. "|GetAddress|_NewEnum|HasKey|Clone)$"
+		
+		if !ObjHasOwnProp(xml, method) {
+			if RegExMatch(method, "iJ)^(add|insert)((?P<_>E)lement|(?P<_>C)hild)$", &m) {
+				return this["addInsert" m.1_](method, params*)
+			}
+			else {
+				try return (this.doc)[method](params*)
+				catch as e
+				if !(method ~= BF)
+				throw e
+			}
+			; try return (this.doc)[method](params*)
+			; catch as e
+			; if !(method ~= BF)
+			; throw e
+		}
+	}
+}
+
+
+/*
 	___________________________________________________________________________________
 	
 	***THE FOLLOWING METHOD(s) ARE USING SIMILAR ROUTINES AND ARE CALLED DYNAMICALLY.
