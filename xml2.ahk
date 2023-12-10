@@ -1,22 +1,48 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 
-class xml 
+class xml
 {
-	static load(src) {
-		if FileExist(src) {
-			data := FileRead(src)
-		} else {
-			data := src
+	__New(src:="") {
+		this.doc := ComObject("MSXML2.DOMDocument.6.0")
+		if src {
+			if (src ~= "s)^<.*>$") { ; XML string
+				this.doc.loadXML(src)
+			}
+			else if (src ~= "[^<>:`"/\\|?*]+\.[^<>:`"/\\|?*\s]+$") {
+				if FileExist(src) { ; Path/URL to XML file/resource
+					this.doc.load(src)
+				}
+			} 
 		}
-		oXML := ComObject("MSXML2.DOMDocument.6.0")
-		oXML.Async := false
-		oXML.loadXML(data)
-	
-		return oXML
+	}
+	__Get(property,parms*) {
+		return this.xml.doc
+	}
+	; __Set(Key, Params, Value) {
+	; 	MsgBox()
+	; }
+	; __Call(Name, Params) {
+	; 	MsgBox()
+	; }
+
+	static new(src:="") {
+		this.doc := ComObject("MSXML2.DOMDocument.6.0")
+		if src {
+			if (src ~= "s)^<.*>$") { ; XML string
+				this.doc.loadXML(src)
+			}
+			else if (src ~= "[^<>:`"/\\|?*]+\.[^<>:`"/\\|?*\s]+$") {
+				if FileExist(src) { ; Path/URL to XML file/resource
+					this.doc.load(src)
+				}
+			} 
+		}
+		return this.doc
 	}
 
-	static getAtt(element,id) {
-		
+	static addElement(node,parent) {
+		if this {
+
+		}
 	}
-	
 }
