@@ -2,47 +2,73 @@
 
 class xml
 {
-	__New(src:="") {
-		this.doc := ComObject("MSXML2.DOMDocument.6.0")
-		if src {
-			if (src ~= "s)^<.*>$") { ; XML string
-				this.doc.loadXML(src)
-			}
-			else if (src ~= "[^<>:`"/\\|?*]+\.[^<>:`"/\\|?*\s]+$") {
-				if FileExist(src) { ; Path/URL to XML file/resource
-					this.doc.load(src)
-				}
-			} 
-		}
-	}
-	__Get(property,parms*) {
-		return this.xml.doc
-	}
-	; __Set(Key, Params, Value) {
-	; 	MsgBox()
-	; }
-	; __Call(Name, Params) {
-	; 	MsgBox()
-	; }
-
+/*	First usable version 2023-12-10
+	* new
+	* addElement
+	* insertElement
+*/
 	static new(src:="") {
 		this.doc := ComObject("MSXML2.DOMDocument.6.0")
 		if src {
-			if (src ~= "s)^<.*>$") { ; XML string
+			if (src ~= "s)^<.*>$") {
 				this.doc.loadXML(src)
 			}
-			else if (src ~= "[^<>:`"/\\|?*]+\.[^<>:`"/\\|?*\s]+$") {
-				if FileExist(src) { ; Path/URL to XML file/resource
-					this.doc.load(src)
+			else if FileExist(src) {
+				this.doc.load(src)
+			}
+			return this.doc
+		} 
+	}
+
+	static addElement(node,child,params*) {
+	/*	Appends new child to node object
+		Object must have valid parentNode
+		Creates new XML blank ComObject to avoid messing up other instances
+		Optional params:
+			text gets added as text
+			@attr1='abc', trims outer '' chars
+			@attr2='xyz'
+	*/
+		try IsObject(node.ParentNode) 
+		catch as err {
+			MsgBox("Error: " err.Message)
+		} 
+		else {
+			n := ComObject("MSXML2.DOMDocument.6.0")
+			newElem := n.createElement(child)
+			for p in params {
+				if (p ~= "^@") {
+					RegExMatch(p,"^@(.*?)=(.*?)$",&att)
+					newElem.setAttribute(att[1],trim(att[2],"'"))
+				} else {
+					newElem.text := p
 				}
+			}
+			node.appendChild(newElem)
+			n := ""
+		}
+	}
+	static insertElement(node,new,params*) {
+		/*	Inserts new element above node object
+			Object must have valid parentNode
+		*/
+			try IsObject(node.ParentNode) 
+			catch as err {
+				MsgBox("Error: " err.Message)
 			} 
+			else {
+				n := ComObject("MSXML2.DOMDocument.6.0")
+				newElem := n.createElement(new)
+				for p in params {
+					if (p ~= "^@") {
+						RegExMatch(p,"^@(.*?)=(.*?)$",&att)
+						newElem.setAttribute(att[1],trim(att[2],"'"))
+					} else {
+						newElem.text := p
+					}
+				}
+				node.parentNode.insertBefore(newElem,node)
+				n := ""
+			}
 		}
-		return this.doc
 	}
-
-	static addElement(node,parent) {
-		if this {
-
-		}
-	}
-}
