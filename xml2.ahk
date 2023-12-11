@@ -37,9 +37,10 @@ class xml
 			n := ComObject("MSXML2.DOMDocument.6.0")
 			newElem := n.createElement(child)
 			for p in params {
-				if (p ~= "^@") {
-					RegExMatch(p,"^@(.*?)=(.*?)$",&att)
-					newElem.setAttribute(att[1],trim(att[2],"'"))
+				if IsObject(p) {
+					for key,val in p.OwnProps() {
+						newElem.setAttribute(key,val)
+					}
 				} else {
 					newElem.text := p
 				}
@@ -49,26 +50,27 @@ class xml
 		}
 	}
 	static insertElement(node,new,params*) {
-		/*	Inserts new element above node object
-			Object must have valid parentNode
-		*/
-			try IsObject(node.ParentNode) 
-			catch as err {
-				MsgBox("Error: " err.Message)
-			} 
-			else {
-				n := ComObject("MSXML2.DOMDocument.6.0")
-				newElem := n.createElement(new)
-				for p in params {
-					if (p ~= "^@") {
-						RegExMatch(p,"^@(.*?)=(.*?)$",&att)
-						newElem.setAttribute(att[1],trim(att[2],"'"))
-					} else {
-						newElem.text := p
-					}
+	/*	Inserts new element above node object
+		Object must have valid parentNode
+	*/
+		try IsObject(node.ParentNode) 
+		catch as err {
+			MsgBox("Error: " err.Message)
+		} 
+		else {
+			n := ComObject("MSXML2.DOMDocument.6.0")
+			newElem := n.createElement(new)
+			for p in params {
+				if IsObject(p) {
+					for key,val in p.OwnProps() {
+						newElem.setAttribute(key,val)
+					} 
+				} else {
+					newElem.text := p
 				}
-				node.parentNode.insertBefore(newElem,node)
-				n := ""
 			}
+			node.parentNode.insertBefore(newElem,node)
+			n := ""
 		}
 	}
+}
