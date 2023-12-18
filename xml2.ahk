@@ -73,4 +73,14 @@ class xml
 			n := ""
 		}
 	}
+	static getText(node) {
+	/*	Checks whether node exists to fetch text
+	*/
+		if IsObject(node) {
+			txt := node.text
+		} else {
+			txt := ""
+		}
+		return txt
+	}
 }
