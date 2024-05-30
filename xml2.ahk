@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 
 class xml
 {
@@ -29,7 +29,9 @@ class xml
 			@attr1='abc', trims outer '' chars
 			@attr2='xyz'
 	*/
-		try IsObject(node.ParentNode) 
+		try {
+			IsObject(node.ParentNode)
+		} 
 		catch as err {
 			MsgBox("Error: " err.Message)
 		} 
@@ -49,11 +51,14 @@ class xml
 			n := ""
 		}
 	}
+
 	static insertElement(node,new,params*) {
 	/*	Inserts new element above node object
 		Object must have valid parentNode
 	*/
-		try IsObject(node.ParentNode) 
+		try {
+			IsObject(node.ParentNode)
+		}
 		catch as err {
 			MsgBox("Error: " err.Message)
 		} 
@@ -73,14 +78,14 @@ class xml
 			n := ""
 		}
 	}
+
 	static getText(node) {
 	/*	Checks whether node exists to fetch text
 	*/
-		if IsObject(node) {
-			txt := node.text
-		} else {
-			txt := ""
+		try {
+			return node.text
+		} catch {
+			return ""
 		}
-		return txt
 	}
 }
