@@ -1,4 +1,4 @@
-﻿#Requires AutoHotkey v2.0
+#Requires AutoHotkey v2.0
 
 class xml
 {
@@ -8,7 +8,7 @@ class xml
 	* insertElement
 */
 	static new(src:="") {
-		this.doc := ComObject("MSXML2.DOMDocument.6.0")
+		this.doc := ComObject("MSXML2.DOMDocument")
 		if src {
 			if (src ~= "s)^<.*>$") {
 				this.doc.loadXML(src)
@@ -34,7 +34,7 @@ class xml
 			MsgBox("Error: " err.Message)
 		} 
 		else {
-			n := ComObject("MSXML2.DOMDocument.6.0")
+			n := ComObject("MSXML2.DOMDocument")
 			newElem := n.createElement(child)
 			for p in params {
 				if IsObject(p) {
@@ -58,7 +58,7 @@ class xml
 			MsgBox("Error: " err.Message)
 		} 
 		else {
-			n := ComObject("MSXML2.DOMDocument.6.0")
+			n := ComObject("MSXML2.DOMDocument")
 			newElem := n.createElement(new)
 			for p in params {
 				if IsObject(p) {
