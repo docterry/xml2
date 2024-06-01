@@ -1,42 +1,47 @@
 ﻿#Requires AutoHotkey v2.0
 
-class xml
+class XML
 {
-/*	First usable version 2023-12-10
-	* new
-	* addElement
-	* insertElement
+/*	new() = return new XML document. USE: %objname%.doc.selectSingleNode()
+	addElement() = append new element to node object. USE: %objname%.addElement()
+	insertElement() = insert new element above node object
+	getText() = return element text if present
+	save() = saves XML with filename param or original filename
 */
-	static new(src:="") {
-		this.doc := ComObject("MSXML2.DOMDocument")
-		if src {
+	__New(src:="") {
+		this.doc := ComObject("Msxml2.DOMDocument")
+		if (src) {
 			if (src ~= "s)^<.*>$") {
 				this.doc.loadXML(src)
-			}
+			} 
 			else if FileExist(src) {
 				this.doc.load(src)
+				this.filename := src
 			}
-			return this.doc
-		} 
+		} else {
+			src := "<?xml version=`"1.0`" encoding=`"UTF-8`"?><root />"
+			this.doc.loadXML(src)
+		}
 	}
 
-	static addElement(node,child,params*) {
+	addElement(node,child,params*) {
 	/*	Appends new child to node object
-		Object must have valid parentNode
-		Creates new XML blank ComObject to avoid messing up other instances
-		Optional params:
+		Node can be node object or XPATH
+		Params:
 			text gets added as text
 			@attr1='abc', trims outer '' chars
 			@attr2='xyz'
 	*/
+		node := this.isNode(node)
 		try {
-			IsObject(node.ParentNode)
+			IsObject(node)
 		} 
 		catch as err {
 			MsgBox("Error: " err.Message)
+			return false
 		} 
 		else {
-			n := ComObject("MSXML2.DOMDocument")
+			n := this.doc
 			newElem := n.createElement(child)
 			for p in params {
 				if IsObject(p) {
@@ -52,10 +57,11 @@ class xml
 		}
 	}
 
-	static insertElement(node,new,params*) {
-	/*	Inserts new element above node object
+	insertElement(node,new,params*) {
+	/*	Inserts new sibling above node object
 		Object must have valid parentNode
 	*/
+		node := this.isNode(node)
 		try {
 			IsObject(node.ParentNode)
 		}
@@ -63,7 +69,7 @@ class xml
 			MsgBox("Error: " err.Message)
 		} 
 		else {
-			n := ComObject("MSXML2.DOMDocument")
+			n := this.doc
 			newElem := n.createElement(new)
 			for p in params {
 				if IsObject(p) {
@@ -79,13 +85,36 @@ class xml
 		}
 	}
 
-	static getText(node) {
+	getText(node) {
 	/*	Checks whether node exists to fetch text
+		Prevents error if no text present
 	*/
+		node := this.isNode(node)
 		try {
 			return node.text
 		} catch {
 			return ""
 		}
+	}
+
+	save(fname:="") {
+	/*	Saves XML
+		to fname if passed, otherwise to original filename
+	*/
+		if (fname="") {
+			fname := this.filename
+		}
+		this.doc.save(fname)
+	}
+
+/*	====================================================================================
+	Internal methods
+	==================================================================================== 
+*/
+	isNode(node) {
+		if (node is String) {
+			node := this.doc.selectSingleNode(node)
+		}
+		return node
 	}
 }
