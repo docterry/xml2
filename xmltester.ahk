@@ -52,7 +52,7 @@ class XML
 	getText() = return element text if present
 	save() = saves XML with filename param or original filename
 */
-	__New(src) {
+	__New(src:="") {
 		this.doc := ComObject("Msxml2.DOMDocument")
 		if (src) {
 			if (src ~= "s)^<.*>$") {
@@ -62,6 +62,9 @@ class XML
 				this.doc.load(src)
 				this.filename := src
 			}
+		} else {
+			src := "<?xml version=`"1.0`" encoding=`"UTF-8`"?><root />"
+			this.doc.loadXML(src)
 		}
 	}
 
