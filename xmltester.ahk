@@ -67,6 +67,7 @@ class XML
 
 	addElement(node,child,params*) {
 	/*	Appends new child to node object
+		Node can be node object or XPATH
 		Params:
 			text gets added as text
 			@attr1='abc', trims outer '' chars
@@ -127,6 +128,7 @@ class XML
 
 	getText(node) {
 	/*	Checks whether node exists to fetch text
+		Prevents error if no text present
 	*/
 		node := this.isNode(node)
 		try {
@@ -137,6 +139,9 @@ class XML
 	}
 
 	save(fname:="") {
+	/*	Saves XML
+		to fname if passed, otherwise to original filename
+	*/
 		if (fname="") {
 			fname := this.filename
 		}
