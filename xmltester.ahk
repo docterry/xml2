@@ -26,6 +26,8 @@ data := "
 	</pending>
 </root>
 )"
+; data := "worklist.xml"
+; data := ""
 
 oXML := XML(data)
 oXML.here := {}
@@ -36,7 +38,6 @@ name := pnd.selectSingleNode("name").Text
 id := pnd.getAttribute("id")
 
 oXML.addElement(pnd,"newnode","this")
-oXML.insertElement("//enroll[@id='user1']/dob","house","blue")
 oXML.insertElement("//enroll[@id='user2']/date","house","green")
 pnd2 := pnd.selectSingleNode("newnode")
 update := oXML.getText(pnd2)
