@@ -2,8 +2,8 @@
 
 class XML
 {
-/*	new() = return new XML document. USE: %objname%.doc.selectSingleNode()
-	addElement() = append new element to node object. USE: %objname%.addElement()
+/*	new() = return new XML document
+	addElement() = append new element to node object
 	insertElement() = insert new element above node object
 	getText() = return element text if present
 	save() = saves XML with filename param or original filename
@@ -22,6 +22,18 @@ class XML
 			src := "<?xml version=`"1.0`" encoding=`"UTF-8`"?><root />"
 			this.doc.loadXML(src)
 		}
+	}
+
+	__Call(method, params) {
+		if !ObjHasOwnProp(XML,method) {
+			try {
+				return this.doc.%method%(params[1])
+			}
+			catch as err {
+				MsgBox("Error: " err.Message)
+				return false
+			} 
+			}
 	}
 
 	addElement(node,child,params*) {
@@ -108,8 +120,7 @@ class XML
 	}
 
 /*	====================================================================================
-	Internal methods
-	==================================================================================== 
+	INTERNAL METHODS
 */
 	isNode(node) {
 		if (node is String) {

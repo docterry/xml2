@@ -30,10 +30,9 @@ data := "
 ; data := ""
 
 oXML := XML(data)
-oXML.here := {}
-en := oXML.doc.selectNodes("//enroll")
+en := oXML.selectNodes("//enroll")
 num := en.Length
-pnd := oXML.doc.selectSingleNode("//enroll[@id='user1']")
+pnd := oXML.selectSingleNode("//enroll[@id='user1']")
 name := pnd.selectSingleNode("name").Text
 id := pnd.getAttribute("id")
 
@@ -41,6 +40,7 @@ oXML.addElement(pnd,"newnode","this")
 oXML.insertElement("//enroll[@id='user2']/date","house","green")
 pnd2 := pnd.selectSingleNode("newnode")
 update := oXML.getText(pnd2)
+pnd3 := pnd2.Text
 oXML.save(A_Now ".xml")
 
 ExitApp
@@ -67,6 +67,18 @@ class XML
 			src := "<?xml version=`"1.0`" encoding=`"UTF-8`"?><root />"
 			this.doc.loadXML(src)
 		}
+	}
+
+	__Call(method, params) {
+		if !ObjHasOwnProp(XML,method) {
+			try {
+				return this.doc.%method%(params[1])
+			}
+			catch as err {
+				MsgBox("Error: " err.Message)
+				return false
+			} 
+			}
 	}
 
 	addElement(node,child,params*) {
