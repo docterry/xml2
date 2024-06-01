@@ -5,24 +5,21 @@ data := "
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
 	<pending update="20231109081007">
-		<enroll id="2DIX1W13TQCB">
+		<enroll id="user1">
 			<date>20240213</date>
 			<name>MAXIMUS, GLUTEUS</name>
-			<mrn>1511076</mrn>
 			<sex>Male</sex>
 			<dob>08/19/2002</dob>
 		</enroll>
-		<enroll id="2E02ZD8T4CZ2">
+		<enroll id="user2">
 			<date>20231030</date>
 			<name>RABBIT, PETER</name>
-			<mrn>1053167</mrn>
 			<sex>Male</sex>
 			<dob>08/26/2006</dob>
 		</enroll>
-		<enroll id="2DJ7JL7KDA17">
+		<enroll id="user3">
 			<date>20220623</date>
 			<name>LINCOLN, ABE</name>
-			<mrn>2043565</mrn>
 			<sex>Male</sex>
 			<dob>10/06/2007</dob>
 		</enroll>
@@ -34,13 +31,13 @@ oXML := XML(data)
 oXML.here := {}
 en := oXML.doc.selectNodes("//enroll")
 num := en.Length
-pnd := oXML.doc.selectSingleNode("//enroll[@id='2DIX1W13TQCB']")
+pnd := oXML.doc.selectSingleNode("//enroll[@id='user1']")
 name := pnd.selectSingleNode("name").Text
 id := pnd.getAttribute("id")
 
 oXML.addElement(pnd,"newnode","this")
-oXML.insertElement("//enroll[@id='2E02ZD8T4CZ2']/dob","house","blue")
-oXML.insertElement("//enroll[@id='2DIX1W13TQCB']/date","house","green")
+oXML.insertElement("//enroll[@id='user1']/dob","house","blue")
+oXML.insertElement("//enroll[@id='user2']/date","house","green")
 pnd2 := pnd.selectSingleNode("newnode")
 update := oXML.getText(pnd2)
 oXML.save(A_Now ".xml")
