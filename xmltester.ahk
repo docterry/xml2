@@ -30,56 +30,61 @@ data := "
 </root>
 )"
 
-oXML := XML.new(data)
-en := oXML.selectNodes("//enroll")
+oXML := XML(data)
+oXML.here := {}
+en := oXML.doc.selectNodes("//enroll")
 num := en.Length
-pnd := oXML.selectSingleNode("//enroll[@id='2DIX1W13TQCB']")
+pnd := oXML.doc.selectSingleNode("//enroll[@id='2DIX1W13TQCB']")
 name := pnd.selectSingleNode("name").Text
 id := pnd.getAttribute("id")
 
-XML.addElement(pnd,"newnode","this")
+oXML.addElement(pnd,"newnode","this")
+oXML.insertElement("//enroll[@id='2E02ZD8T4CZ2']/dob","house","blue")
+oXML.insertElement("//enroll[@id='2DIX1W13TQCB']/date","house","green")
 pnd2 := pnd.selectSingleNode("newnode")
-update := XML.getText(pnd2)
+update := oXML.getText(pnd2)
+oXML.save(A_Now ".xml")
 
 ExitApp
 
 class XML
 {
-/*	new() = return new XML document
-	addElement() = append new element to node object
+/*	new() = return new XML document. Access using %objname%.doc.selectSingleNode()
+	addElement() = append new element to node object. Access using %objname%.addElement()
 	insertElement() = insert new element above node object
 	getText() = return element text if present
+	save() = saves XML with filename param or original filename
 */
-	static new(src:="") {
-		this.doc := ComObject("MSXML2.DOMDocument")
+	__New(src) {
+		this.doc := ComObject("Msxml2.DOMDocument")
 		if (src) {
 			if (src ~= "s)^<.*>$") {
 				this.doc.loadXML(src)
 			} 
 			else if FileExist(src) {
 				this.doc.load(src)
+				this.filename := src
 			}
 		}
-		return this.doc
 	}
 
-	static addElement(node,child,params*) {
+	addElement(node,child,params*) {
 	/*	Appends new child to node object
-		Object must have valid parentNode
-		Creates new XML blank ComObject to avoid messing up other instances
-		Optional params:
+		Params:
 			text gets added as text
 			@attr1='abc', trims outer '' chars
 			@attr2='xyz'
 	*/
+		node := this.isNode(node)
 		try {
-			IsObject(node.ParentNode)
+			IsObject(node)
 		} 
 		catch as err {
 			MsgBox("Error: " err.Message)
+			return false
 		} 
 		else {
-			n := ComObject("MSXML2.DOMDocument")
+			n := this.doc
 			newElem := n.createElement(child)
 			for p in params {
 				if IsObject(p) {
@@ -95,10 +100,11 @@ class XML
 		}
 	}
 
-	static insertElement(node,new,params*) {
-	/*	Inserts new element above node object
+	insertElement(node,new,params*) {
+	/*	Inserts new sibling above node object
 		Object must have valid parentNode
 	*/
+		node := this.isNode(node)
 		try {
 			IsObject(node.ParentNode)
 		}
@@ -106,7 +112,7 @@ class XML
 			MsgBox("Error: " err.Message)
 		} 
 		else {
-			n := ComObject("MSXML2.DOMDocument")
+			n := this.doc
 			newElem := n.createElement(new)
 			for p in params {
 				if IsObject(p) {
@@ -122,13 +128,30 @@ class XML
 		}
 	}
 
-	static getText(node) {
+	getText(node) {
 	/*	Checks whether node exists to fetch text
 	*/
+		node := this.isNode(node)
 		try {
 			return node.text
 		} catch {
 			return ""
 		}
+	}
+
+	save(fname:="") {
+		if (fname="") {
+			fname := this.filename
+		}
+		this.doc.save(fname)
+	}
+
+/*	Internal methods
+*/
+	isNode(node) {
+		if (node is String) {
+			node := this.doc.selectSingleNode(node)
+		}
+		return node
 	}
 }
