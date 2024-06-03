@@ -15,7 +15,7 @@ oXML.insertElement(pnd2,"newish")
 pnd3 := oXML.selectSingleNode("//enroll[@id='user1']/sex")
 oXML.findXPath(pnd3)
 
-oXML.save(A_Now ".xml")
+oXML.saveXML()
 
 ExitApp
 

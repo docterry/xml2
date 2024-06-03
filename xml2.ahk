@@ -7,7 +7,7 @@ class XML
 	insertElement() = insert new element above node object
 	getText() = return element text if present
 	findXPath() = return xpath to node (needs work)
-	save() = saves XML with filename param or original filename
+	saveXML() = saves XML with filename param or original filename
 */
 	__New(src:="") {
 		this.doc := ComObject("Msxml2.DOMDocument")
@@ -110,7 +110,7 @@ class XML
 		}
 	}
 
-	save(fname:="") {
+	saveXML(fname:="") {
 	/*	Saves XML
 		to fname if passed, otherwise to original filename
 	*/
