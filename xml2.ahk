@@ -6,6 +6,7 @@ class XML
 	addElement() = append new element to node object
 	insertElement() = insert new element above node object
 	getText() = return element text if present
+	findXPath() = return xpath to node (needs work)
 	save() = saves XML with filename param or original filename
 */
 	__New(src:="") {
@@ -149,7 +150,7 @@ class XML
 	}
 
 /*	====================================================================================
-	INTERNAL METHODS
+	INTERNAL SUPPORT FUNCTIONS
 */
 	isNode(node) {
 		if (node is String) {
