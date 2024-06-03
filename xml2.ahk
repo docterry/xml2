@@ -119,6 +119,35 @@ class XML
 		this.doc.save(fname)
 	}
 
+	findXPath(node) {
+	/*	Returns xpath of node
+	*/
+		; x := node.nodeType
+		build := ""
+
+		while (node.parentNode) {
+			switch node.nodeType {
+				case 1:																	; 1=Element
+				{
+					index := this.elementIndex(node)
+					build := "/" node.nodeName "[" index "]" . build
+					node := node.parentNode
+				} 
+				case 2:																	; 2=Attribute
+				{
+
+				}
+				case 3:																	; 3=Text
+				{
+
+				}
+				default:
+					
+			}
+		}
+		return build
+	}
+
 /*	====================================================================================
 	INTERNAL METHODS
 */
@@ -127,5 +156,13 @@ class XML
 			node := this.doc.selectSingleNode(node)
 		}
 		return node
+	}
+	elementIndex(node) {
+		parent := node.parentNode
+		for candidate in parent.childNodes {
+			if (candidate.nodeName=node.nodeName) {
+				return A_Index
+			}
+		}
 	}
 }

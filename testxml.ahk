@@ -1,18 +1,21 @@
 #Requires AutoHotkey v2.0
 
-fnam := "worklist.xml"
+fnam := "simple.xml"
 data := FileRead(fnam)
-oXML := xml.new(fnam)
+oXML := XML(fnam)
 en := oXML.selectNodes("//enroll")
 num := en.Length
-pnd := oXML.selectSingleNode("//enroll[@id='6RD4YMGS39']")
-update := pnd.selectSingleNode("dev").Text
+pnd := oXML.selectSingleNode("//enroll[@id='user1']")
+update := pnd.selectSingleNode("date").Text
 id := pnd.getAttribute("id")
-xml.addElement(pnd,"newnode","value here",{date:A_now,last:'2022 "best" year'} )
+oXML.addElement(pnd,"newnode","value here",{date:A_now,last:'2022 "best" year'} )
 pnd2 := pnd.selectSingleNode("newnode")
-xml.insertElement(pnd2,"newish")
+oXML.insertElement(pnd2,"newish")
 
-oXML.save("worklist2.xml")
+pnd3 := oXML.selectSingleNode("//enroll[@id='user1']/sex")
+oXML.findXPath(pnd3)
+
+oXML.save(A_Now ".xml")
 
 ExitApp
 
