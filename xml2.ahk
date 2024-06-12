@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 
 class XML
 {
@@ -108,6 +108,30 @@ class XML
 		}
 	}
 
+	removeNode(node) {
+	/*	Removes node
+	*/
+		node := this.isNode(node)
+		try {
+			IsObject(node)
+		} 
+		catch as err {
+			MsgBox("Error: " err.Message)
+			return false
+		} 
+		else {
+			try {
+				node := this.doc.selectSingleNode(node)
+			}
+			catch as err {
+				MsgBox("Error: " err.Message)
+				return false
+			}
+		}
+
+		try node.parentNode.removeChild(node)
+	}
+	
 	saveXML(fname:="") {
 	/*	Saves XML
 		to fname if passed, otherwise to original filename
@@ -153,6 +177,8 @@ class XML
 		return build
 	}
 
+	
+
 /*	====================================================================================
 	INTERNAL SUPPORT FUNCTIONS
 */
@@ -162,6 +188,7 @@ class XML
 		}
 		return node
 	}
+
 	elementIndex(node) {
 		parent := node.parentNode
 		for candidate in parent.childNodes {
