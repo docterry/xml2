@@ -108,26 +108,20 @@ class XML
 		}
 	}
 
-	removeNode(node) {
-	/*	Removes node
+	setText(node,txt) {
+	/*	Set text value for a node
+		Node must exist
 	*/
 		node := this.isNode(node)
 		try {
-			IsObject(node)
-		} 
-		catch as err {
-			MsgBox("Error: " err.Message)
-			return false
-		} 
-		else {
-			try {
-				node := this.doc.selectSingleNode(node)
-			}
-			catch as err {
-				MsgBox("Error: " err.Message)
-				return false
-			}
+			node.text := txt
 		}
+	}
+
+	removeNode(nodein) {
+	/*	Removes node
+	*/
+		node := this.isNode(nodein)
 
 		try node.parentNode.removeChild(node)
 	}
