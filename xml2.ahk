@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 
 class XML
 {
@@ -115,6 +115,9 @@ class XML
 		node := this.isNode(node)
 		try {
 			node.text := txt
+		}
+		catch {
+			return
 		}
 	}
 
