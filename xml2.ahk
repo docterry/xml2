@@ -1,4 +1,4 @@
-﻿#Requires AutoHotkey v2.0
+#Requires AutoHotkey v2.0
 
 class XML
 {
@@ -178,9 +178,11 @@ class XML
 */
 	isNode(node) {
 		if (node is String) {
-			node := this.doc.selectSingleNode(node)
+			try node := this.doc.selectSingleNode(node)
 		}
-		return node
+		try {
+			return node
+		}
 	}
 
 	elementIndex(node) {
