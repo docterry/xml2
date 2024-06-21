@@ -121,6 +121,17 @@ class XML
 		}
 	}
 
+	setAtt(nodein,atts) {
+	/*	Set attributes of an existing node
+		atts object can contain multiple attribute pairs
+	*/
+		node := this.isNode(nodein)
+		for att,val in atts.OwnProps()
+		{
+			try node.setAttribute(att,val)
+		}
+	}
+
 	removeNode(nodein) {
 	/*	Removes node
 	*/
