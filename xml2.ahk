@@ -1,4 +1,4 @@
-﻿#Requires AutoHotkey v2.0
+#Requires AutoHotkey v2.0
 
 class XML
 {
@@ -110,14 +110,20 @@ class XML
 
 	setText(node,txt) {
 	/*	Set text value for a node
-		Node must exist
+		If node does not exist, create node first
+		Must have valide parent node
 	*/
 		node := this.isNode(node)
+		parent := node.parentNode
+		child := node.nodeName
 		try {
 			node.text := txt
 		}
 		catch {
-			return
+			n := this.doc
+			newElem := n.createElement(child)
+			newElem.text := txt
+			return parent.appendChild(newElem)
 		}
 	}
 
