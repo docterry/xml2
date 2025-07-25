@@ -6,7 +6,11 @@ class XML
 	addElement() = append new element to node object
 	insertElement() = insert new element above node object
 	getText() = return element text if present
+	setText() = set element text, create element if needed
+	setAtt() = set attributes
+	removeNode() = remove a node
 	findXPath() = return xpath to node (needs work)
+	transformXML() = format XML stream
 	saveXML() = saves XML with filename param or original filename
 */
 	__New(src:="") {
@@ -34,7 +38,7 @@ class XML
 				MsgBox("Error: " err.Message)
 				return false
 			} 
-			}
+		}
 	}
 
 	addElement(node,child,params*) {
