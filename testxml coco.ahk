@@ -1,8 +1,8 @@
-#Requires AutoHotkey v2.0
+#Requires AutoHotkey v1.1
 
 fnam := ".\data\simple.xml"
-data := FileRead(fnam)
-oXML := XML(fnam)
+FileRead, data, % fnam
+oXML := new XML(fnam)
 en := oXML.selectNodes("//enroll")
 num := en.Length
 
@@ -11,11 +11,11 @@ pnd := oXML.selectSingleNode("//enroll[name='RABBIT, PETER']")
 update := pnd.selectSingleNode("date").Text
 id := pnd.getAttribute("id")
 
-; pnd2 := oXML.addElement(pnd,"newnode","value here",{date:A_now,last:'2022 "best" year'} )
-pnd2 := pnd.addElement("newnode","value here",{date:A_now,last:'2022 "best" year'})
+pnd2 := oXML.addElement(pnd,"newnode","value here",{date:A_now,last:"2022 ""best"" year"} )
+; pnd2 := pnd.addElement("newnode","value here",{date:A_now,last:"2022 ""best"" year"})
 
-pnd3 := oXML.insertElement(pnd2,"newish")
-oXML.setAtt(pnd3,{item:5, color:"blue"})
+; pnd3 := oXML.insertElement(pnd2,"newish","params")
+pnd2.setAtt(pnd2,{item:5, color:"blue"})
 pnd3.setAttribute("color","&quot;red&quot;")
 ; pnd2.setAttribute()
 
@@ -29,4 +29,4 @@ oXML.saveXML(".\data\" A_Now ".xml")
 
 ExitApp
 
-#Include xml2.ahk
+#Include xml-coco.ahk
