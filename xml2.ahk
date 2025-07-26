@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 
 class XML
 {
@@ -38,8 +38,7 @@ class XML
 				return this.doc.%method%(params[1])
 			}
 			catch as err {
-				MsgBox("Error: " err.Message)
-				return false
+				throw ValueError(this.errString(err))
 			} 
 		}
 	}
@@ -57,8 +56,7 @@ class XML
 			IsObject(node)
 		} 
 		catch as err {
-			MsgBox("Error: " err.Message)
-			return false
+			throw ValueError(this.errString(err))
 		} 
 		else {
 			n := this.doc
@@ -85,7 +83,7 @@ class XML
 			IsObject(node.ParentNode)
 		}
 		catch as err {
-			MsgBox("Error: " err.Message)
+			throw ValueError(this.errString(err))
 		} 
 		else {
 			n := this.doc
@@ -110,8 +108,8 @@ class XML
 		node := this.isNode(node)
 		try {
 			return node.text
-		} catch {
-			return ""
+		} catch as err {
+			throw ValueError(this.errString(err))
 		}
 	}
 
@@ -203,6 +201,14 @@ class XML
 /*	====================================================================================
 	INTERNAL SUPPORT FUNCTIONS
 */
+	errString(err) {
+		return "Error: " err.Message "`n"
+			. "What: " err.What "`n"
+			. "Where: " err.Extra "`n"
+			. "File: " err.File "`n"
+			. "Line: " err.Line "`n"
+			. "Stack: " err.Stack
+	}
 	isNode(node) {
 		if (node is String) {
 			try node := this.doc.selectSingleNode(node)
