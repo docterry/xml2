@@ -168,9 +168,8 @@ class XML
 	}
 	
 	findXPath(node) {
-	/*	Returns xpath of node
+	/*	Returns rough xpath of node
 	*/
-		; x := node.nodeType
 		build := ""
 
 		while (node.parentNode) {
@@ -219,12 +218,15 @@ class XML
 	}
 
 	elementIndex(node) {
-		parent := node.parentNode
-		for candidate in parent.childNodes {
-			if (candidate.nodeName=node.nodeName) {
-				return A_Index
+		loop {
+			try {
+				node := node.previousSibling
+				idx := A_Index
+			} catch {
+				break
 			}
 		}
+		return idx
 	}
 
 	style() {
