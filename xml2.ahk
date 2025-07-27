@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 
 class XML
 {
@@ -24,7 +24,7 @@ class XML
 				this.filename := src
 			}
 			if !(this.doc.hasChildNodes) {
-				throw ValueError("Parameter does not appear to be valid XML.")
+				throw ValueError("Cannot initialize XML object. Parameter does not appear to contain valid XML.")
 			}
 		} else {
 			src := "<?xml version=`"1.0`" encoding=`"UTF-8`"?><root />"
