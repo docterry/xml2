@@ -11,8 +11,9 @@ pnd := oXML.selectSingleNode("//enroll[name='RABBIT, PETER']")
 update := pnd.selectSingleNode("date").Text
 id := pnd.getAttribute("id")
 
-; pnd2 := oXML.addElement(pnd,"newnode","value here",{date:A_now,last:'2022 "best" year'} )
-pnd2 := pnd.addElement("newnode","value here",{date:A_now,last:'2022 "best" year'})
+pnd2 := oXML.addElement(pnd,"newnode","value here",{date:A_now,last:'2022 "best" year'} )
+; pnd2 := pnd.addElement("newnode","value here",{date:A_now,last:'2022 "best" year'})
+OutputDebug oXML.findXPath(pnd2)
 
 pnd3 := oXML.insertElement(pnd2,"newish")
 oXML.setAtt(pnd3,{item:5, color:"blue"})
