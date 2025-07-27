@@ -1,4 +1,4 @@
-﻿#Requires AutoHotkey v2.0
+#Requires AutoHotkey v2.0
 
 class XML
 {
@@ -140,6 +140,19 @@ class XML
 		for att,val in atts.OwnProps()
 		{
 			try node.setAttribute(att,val)
+		}
+	}
+
+	getAtt(nodein,att) {
+	/*	Get attribute for existing node
+		Here mostly for consistency, to match setAtt
+	*/
+		node := this.isNode(nodein)
+		try {
+			return node.getAttribute(att)
+		}
+		catch {
+			return ""
 		}
 	}
 
