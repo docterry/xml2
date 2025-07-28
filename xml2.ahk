@@ -125,7 +125,7 @@ class XML
 		catch {
 			newElem := this.doc.createElement(child)
 			newElem.text := txt
-			return parent.appendChild(newElem)
+			parent.appendChild(newElem)
 		}
 	}
 
