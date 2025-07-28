@@ -59,8 +59,7 @@ class XML
 			throw ValueError(this.errString(err))
 		} 
 		else {
-			n := this.doc
-			newElem := n.createElement(child)
+			newElem := this.doc.createElement(child)
 			for p in params {
 				if IsObject(p) {
 					for key,val in p.OwnProps() {
@@ -86,8 +85,7 @@ class XML
 			throw ValueError(this.errString(err))
 		} 
 		else {
-			n := this.doc
-			newElem := n.createElement(new)
+			newElem := this.doc.createElement(new)
 			for p in params {
 				if IsObject(p) {
 					for key,val in p.OwnProps() {
@@ -125,8 +123,7 @@ class XML
 			node.text := txt
 		}
 		catch {
-			n := this.doc
-			newElem := n.createElement(child)
+			newElem := this.doc.createElement(child)
 			newElem.text := txt
 			return parent.appendChild(newElem)
 		}
