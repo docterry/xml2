@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 
 class XML
 {
@@ -7,7 +7,10 @@ class XML
 	insertElement() = insert new element above node object
 	getText() = return element text if present
 	setText() = set element text, create element if needed
+	getAtt() = get attribute
 	setAtt() = set attributes
+	copyNode() = clone a node and append to another node
+	moveNode() = clode a node and move to another node 
 	removeNode() = remove a node
 	findXPath() = return xpath to node (needs work)
 	transformXML() = format XML stream
@@ -114,7 +117,7 @@ class XML
 	setText(node,txt) {
 	/*	Set text value for a node
 		If node does not exist, create node first
-		Must have valide parent node
+		Must have valid parent node
 	*/
 		node := this.isNode(node)
 		parent := node.parentNode
