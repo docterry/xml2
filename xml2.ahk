@@ -176,6 +176,23 @@ class XML
 		}
 	}
 
+	copyNode(nodein,dest) {
+	/*	Copies a clone of node to destination node
+	*/
+		node := this.isNode(nodein)
+		destnode := this.isNode(dest)
+
+		try {
+			copy := node.cloneNode(true)
+			x := destnode.nodeName
+			y := destnode.text
+			destnode.appendChild(copy)
+		}
+		catch as err {
+			throw ValueError(this.errString(err))
+		}
+	}
+
 	removeNode(nodein) {
 	/*	Removes node
 	*/
