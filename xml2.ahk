@@ -153,6 +153,29 @@ class XML
 		}
 	}
 
+	renameNode(nodein,newName) {
+	/*	Renames a node
+		Retains all attributes and children
+	*/
+		node := this.isNode(nodein)
+		newnode := this.doc.createElement(newName)
+
+		while node.hasChildNodes {
+			newnode.appendChild(node.firstChild)
+		}
+		
+		while (node.attributes.length > 0) {
+			newnode.setAttributeNode(node.removeAttributeNode(node.attributes[0]))
+		}
+
+		try {
+			node.parentNode.replaceChild(newnode,node)
+		} 
+		catch as err {
+			throw ValueError(this.errString(err))
+		}
+	}
+
 	removeNode(nodein) {
 	/*	Removes node
 	*/
