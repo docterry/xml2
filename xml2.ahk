@@ -2,7 +2,8 @@
 
 class XML
 {
-/*	new() = return new XML document
+/*	XML class for AHK v2 (2025) by docterry
+	new() = return new XML document
 	addElement() = append new element to node object
 	insertElement() = insert new element above node object
 	getText() = return element text if present
