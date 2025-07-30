@@ -1,4 +1,4 @@
-﻿#Requires AutoHotkey v2.0
+#Requires AutoHotkey v2.0
 
 class XML
 {
@@ -18,7 +18,7 @@ class XML
 	saveXML() = saves XML with filename param or original filename
 */
 	__New(src:="") {
-		this.doc := ComObject("Msxml2.DOMDocument.6.0")
+		this.doc := ComObject("Msxml2.DOMDocument")
 		if (src) {
 			if (src ~= "s)^<.*>$") {
 				this.doc.loadXML(src)
@@ -306,7 +306,7 @@ class XML
 			IsObject(xsl)
 		}
 		catch {
-			xsl := ComObject("Msxml2.DOMDocument.6.0")
+			xsl := ComObject("Msxml2.DOMDocument")
 			style := "
 			(LTrim
 			<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
