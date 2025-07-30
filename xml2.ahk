@@ -2,7 +2,8 @@
 
 class XML
 {
-/*	new() = return new XML document
+/*	XML class for AHK v2 (2025) by docterry
+	new() = return new XML document
 	addElement() = append new element to node object
 	insertElement() = insert new element above node object
 	getText() = return element text if present
@@ -17,7 +18,7 @@ class XML
 	saveXML() = saves XML with filename param or original filename
 */
 	__New(src:="") {
-		this.doc := ComObject("Msxml2.DOMDocument.6.0")
+		this.doc := ComObject("Msxml2.DOMDocument")
 		if (src) {
 			if (src ~= "s)^<.*>$") {
 				this.doc.loadXML(src)
@@ -51,8 +52,7 @@ class XML
 		Node can be node object or XPATH
 		Params:
 			text gets added as text
-			@attr1='abc', trims outer '' chars
-			@attr2='xyz'
+			{attr1:'abc', attr2='xyz'}
 	*/
 		node := this.isNode(node)
 		try {
@@ -132,22 +132,22 @@ class XML
 		}
 	}
 
-	setAtt(nodein,atts) {
+	setAtt(node,atts) {
 	/*	Set attributes of an existing node
 		atts object can contain multiple attribute pairs
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 		for att,val in atts.OwnProps()
 		{
 			try node.setAttribute(att,val)
 		}
 	}
 
-	getAtt(nodein,att) {
+	getAtt(node,att) {
 	/*	Get attribute for existing node
 		Here mostly for consistency, to match setAtt
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 		try {
 			return node.getAttribute(att)
 		}
@@ -156,11 +156,11 @@ class XML
 		}
 	}
 
-	renameNode(nodein,newName) {
+	renameNode(node,newName) {
 	/*	Renames a node
 		Retains all attributes and children
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 		newnode := this.doc.createElement(newName)
 
 		while node.hasChildNodes {
@@ -179,10 +179,10 @@ class XML
 		}
 	}
 
-	copyNode(nodein,dest) {
+	copyNode(node,dest) {
 	/*	Copies a clone of node to destination node
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 		destnode := this.isNode(dest)
 
 		try {
@@ -196,10 +196,10 @@ class XML
 		}
 	}
 
-	moveNode(nodein,dest) {
+	moveNode(node,dest) {
 	/*	Moves a clone of node to destination node
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 		destnode := this.isNode(dest)
 
 		try {
@@ -212,10 +212,10 @@ class XML
 		}
 	}
 
-	removeNode(nodein) {
+	removeNode(node) {
 	/*	Removes node
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 
 		try node.parentNode.removeChild(node)
 	}
@@ -305,7 +305,7 @@ class XML
 			IsObject(xsl)
 		}
 		catch {
-			xsl := ComObject("Msxml2.DOMDocument.6.0")
+			xsl := ComObject("Msxml2.DOMDocument")
 			style := "
 			(LTrim
 			<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
