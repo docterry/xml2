@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 
 class XML
 {
@@ -52,8 +52,7 @@ class XML
 		Node can be node object or XPATH
 		Params:
 			text gets added as text
-			@attr1='abc', trims outer '' chars
-			@attr2='xyz'
+			{attr1:'abc', attr2='xyz'}
 	*/
 		node := this.isNode(node)
 		try {
@@ -133,22 +132,22 @@ class XML
 		}
 	}
 
-	setAtt(nodein,atts) {
+	setAtt(node,atts) {
 	/*	Set attributes of an existing node
 		atts object can contain multiple attribute pairs
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 		for att,val in atts.OwnProps()
 		{
 			try node.setAttribute(att,val)
 		}
 	}
 
-	getAtt(nodein,att) {
+	getAtt(node,att) {
 	/*	Get attribute for existing node
 		Here mostly for consistency, to match setAtt
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 		try {
 			return node.getAttribute(att)
 		}
@@ -157,11 +156,11 @@ class XML
 		}
 	}
 
-	renameNode(nodein,newName) {
+	renameNode(node,newName) {
 	/*	Renames a node
 		Retains all attributes and children
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 		newnode := this.doc.createElement(newName)
 
 		while node.hasChildNodes {
@@ -180,10 +179,10 @@ class XML
 		}
 	}
 
-	copyNode(nodein,dest) {
+	copyNode(node,dest) {
 	/*	Copies a clone of node to destination node
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 		destnode := this.isNode(dest)
 
 		try {
@@ -197,10 +196,10 @@ class XML
 		}
 	}
 
-	moveNode(nodein,dest) {
+	moveNode(node,dest) {
 	/*	Moves a clone of node to destination node
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 		destnode := this.isNode(dest)
 
 		try {
@@ -213,10 +212,10 @@ class XML
 		}
 	}
 
-	removeNode(nodein) {
+	removeNode(node) {
 	/*	Removes node
 	*/
-		node := this.isNode(nodein)
+		node := this.isNode(node)
 
 		try node.parentNode.removeChild(node)
 	}
